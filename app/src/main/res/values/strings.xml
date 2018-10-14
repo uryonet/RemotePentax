@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">RemotePentax</string>
     <string name="description">Picture</string>
+    <string name="list_title">Photo List</string>
+    <string name="loading_photos">Loading Now...</string>
 </resources>

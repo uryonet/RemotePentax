@@ -1,8 +1,11 @@
 package com.uryonet.remotepentax;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.GridView;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+
+import com.uryonet.remotepentax.service.model.PhotoList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,18 +20,29 @@ public class MainActivity extends AppCompatActivity {
             "101_1011/IMGP5449.JPG"
     };
 
+    private PhotoList photoList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // GridViewのインスタンス生成
-        GridView gridView = findViewById(R.id.gridView);
+        Button button = findViewById(R.id.button);
 
-        // GridAdapterのインスタンス生成
-        GridAdapter adapter = new GridAdapter(this.getApplicationContext(), R.layout.grid_items, photoUrls);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
 
-        // GridViewにGridAdapterをセット
-        gridView.setAdapter(adapter);
+
+//        // GridViewのインスタンス生成
+//        GridView gridView = findViewById(R.id.gridView);
+//
+//        // GridAdapterのインスタンス生成
+//        GridAdapter adapter = new GridAdapter(this.getApplicationContext(), R.layout.grid_items, photoUrls);
+//
+//        // GridViewにGridAdapterをセット
+//        gridView.setAdapter(adapter);
     }
 }
