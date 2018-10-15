@@ -19,6 +19,8 @@ import java.util.List;
 
 public class PhotoListFragment extends Fragment {
 
+    public static final String TAG = "PhotoListFragment";
+
     private PhotoAdapter photoAdapter;
     private FragmentPhotoListBinding binding;
 
@@ -30,7 +32,6 @@ public class PhotoListFragment extends Fragment {
         photoAdapter = new PhotoAdapter();
         binding.photoList.setAdapter(photoAdapter);
         binding.setIsLoading(true);
-
         return binding.getRoot();
     }
 
