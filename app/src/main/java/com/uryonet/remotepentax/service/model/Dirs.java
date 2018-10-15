@@ -10,4 +10,12 @@ public class Dirs {
         this.name = name;
         this.files = files;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getFiles() {
+        return files;
+    }
 }
