@@ -21,6 +21,7 @@ public class PhotoListViewModel extends AndroidViewModel {
         super(application);
 
         LiveData<PhotoList> photoListObservable = PhotoRepository.getInstance().getPicList();
+        // LiveDataのデータを整形処理（写真ファイルパスを抽出）
         imageUrlObservable = Transformations.map(photoListObservable, photoList -> {
            List<Dirs> photoDirs = photoList.getDirs();
            List<String> tmpUrl = new ArrayList<>();
