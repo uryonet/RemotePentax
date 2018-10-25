@@ -8,7 +8,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.uryonet.remotepentax.MyApplication;
+import com.uryonet.remotepentax.app.MyApplication;
 import com.uryonet.remotepentax.service.repository.CameraService;
 
 import static android.content.Context.WINDOW_SERVICE;

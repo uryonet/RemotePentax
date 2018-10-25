@@ -1,4 +1,4 @@
-package com.uryonet.remotepentax;
+package com.uryonet.remotepentax.app;
 
 import android.app.Application;
 import android.content.Context;
