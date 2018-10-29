@@ -11,8 +11,6 @@ import com.uryonet.remotepentax.model.entity.PhotoDir;
 import com.uryonet.remotepentax.presenter.contract.MainContract;
 import com.uryonet.remotepentax.presenter.presenter.MainPresenter;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,18 +39,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 mainPresenter.getPhotoList();
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(mainPresenter);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(mainPresenter);
-        super.onStop();
     }
 
     private void setupMVP() {
