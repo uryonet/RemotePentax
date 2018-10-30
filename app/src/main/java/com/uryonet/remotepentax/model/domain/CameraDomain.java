@@ -1,34 +1,22 @@
-package com.uryonet.remotepentax.model.network;
+package com.uryonet.remotepentax.model.domain;
 
 import com.uryonet.remotepentax.model.entity.PhotoList;
 import com.uryonet.remotepentax.model.event.ErrorEvent;
 import com.uryonet.remotepentax.model.event.PhotoListEvent;
+import com.uryonet.remotepentax.model.network.RetrofitInstance;
+import com.uryonet.remotepentax.model.repository.CameraRepository;
 
 import org.greenrobot.eventbus.EventBus;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CameraDataSource {
-    private CameraAPI service;
+public class CameraDomain {
 
-    public void CameraDataSource() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        OkHttpClient okHttpClient = builder.build();
+    private static CameraRepository service = RetrofitInstance.getRetrofitInstance().create(CameraRepository.class);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.1/v1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
-                .build();
-        service = retrofit.create(CameraAPI.class);
-    }
-
-    public void getPhotoList() {
+    public static void getPhotoList() {
         Call<PhotoList> call = service.getPhotoList();
         call.enqueue(new Callback<PhotoList>() {
             @Override

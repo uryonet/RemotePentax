@@ -1,15 +1,15 @@
-package com.uryonet.remotepentax.presenter.view;
+package com.uryonet.remotepentax.presenter.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.uryonet.remotepentax.R;
-import com.uryonet.remotepentax.model.entity.PhotoDir;
 import com.uryonet.remotepentax.presenter.contract.MainContract;
 import com.uryonet.remotepentax.presenter.presenter.MainPresenter;
+import com.uryonet.remotepentax.presenter.view.adapter.MainAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -20,11 +20,11 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
-    @BindView(R.id.testBtn)
-    Button testBtn;
+    @BindView(R.id.rvPhotoList)
+    RecyclerView rvPhotoList;
 
     private static final String TAG = "MainActivity";
-
+    RecyclerView.Adapter adapter;
     MainPresenter mainPresenter;
 
     @Override
@@ -34,13 +34,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         ButterKnife.bind(this);
 
         setupMVP();
-
-        testBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainPresenter.getPhotoList();
-            }
-        });
+        setupViews();
+        getPhotoList();
     }
 
     @Override
@@ -59,10 +54,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainPresenter = new MainPresenter(this);
     }
 
+    private void setupViews() {
+        rvPhotoList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void getPhotoList() {
+        mainPresenter.getPhotoList();
+    }
+
     @Override
-    public void displayPhotoList(List<PhotoDir> photoDirs) {
-        if(photoDirs != null) {
-            Log.d(TAG, photoDirs.get(0).getFiles().get(0));
+    public void displayPhotoList(List<String> photoUrlList) {
+        if(photoUrlList != null) {
+            adapter = new MainAdapter(photoUrlList, MainActivity.this);
+            rvPhotoList.setAdapter(adapter);
         } else {
             Log.d(TAG, "PhotoDirs response null");
         }

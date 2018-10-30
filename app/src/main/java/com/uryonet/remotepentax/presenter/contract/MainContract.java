@@ -1,14 +1,12 @@
 package com.uryonet.remotepentax.presenter.contract;
 
-import com.uryonet.remotepentax.model.entity.PhotoDir;
-
 import java.util.List;
 
 public interface MainContract {
 
     interface View {
 
-        void displayPhotoList(List<PhotoDir> photoDirs);
+        void displayPhotoList(List<String> photoUrlList);
         void displayError(String s);
 
     }
