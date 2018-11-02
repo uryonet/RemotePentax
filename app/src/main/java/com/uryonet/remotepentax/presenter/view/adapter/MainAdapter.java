@@ -2,6 +2,7 @@ package com.uryonet.remotepentax.presenter.view.adapter;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -29,22 +30,22 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
         this.context = context;
     }
 
-//    protected void onPhotoClicked(View view, @NonNull String currentBrand) {
-//    }
+    protected void onPhotoClicked(View view, @NonNull String currentPhotoUrl) {
+    }
 
     @Override
     public MainHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.row_photo, parent, false);
         final MainHolder mh = new MainHolder(v);
 
-//        mh.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                final int position = mh.getAdapterPosition();
-//                final String currentBrand = brandList.get(position).getCode();
-//                onBrandClicked(view, currentBrand);
-//            }
-//        });
+        mh.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final int position = mh.getAdapterPosition();
+                final String currentPhotoUrl = photoUrlList.get(position);
+                onPhotoClicked(view, currentPhotoUrl);
+            }
+        });
 
         return mh;
     }

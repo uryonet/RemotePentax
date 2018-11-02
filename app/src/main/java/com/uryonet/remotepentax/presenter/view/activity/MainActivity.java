@@ -1,10 +1,14 @@
 package com.uryonet.remotepentax.presenter.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.uryonet.remotepentax.R;
 import com.uryonet.remotepentax.presenter.contract.MainContract;
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @BindView(R.id.rvPhotoList)
     RecyclerView rvPhotoList;
+    Context context;
 
     private static final String TAG = "MainActivity";
     RecyclerView.Adapter adapter;
@@ -65,7 +70,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void displayPhotoList(List<String> photoUrlList) {
         if(photoUrlList != null) {
-            adapter = new MainAdapter(photoUrlList, MainActivity.this);
+            adapter = new MainAdapter(photoUrlList, MainActivity.this) {
+                @Override
+                protected void onPhotoClicked(View view, @NonNull String currentPhotoUrl) {
+                    super.onPhotoClicked(view, currentPhotoUrl);
+                    Intent intent = new Intent(view.getContext(), PreviewPhotoActivity.class);
+                    intent.putExtra("photoUrl", currentPhotoUrl);
+                    startActivity(intent);
+                }
+            };
             rvPhotoList.setAdapter(adapter);
         } else {
             Log.d(TAG, "PhotoDirs response null");
@@ -76,4 +89,5 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void displayError(String s) {
         Log.e(TAG, s);
     }
+
 }
