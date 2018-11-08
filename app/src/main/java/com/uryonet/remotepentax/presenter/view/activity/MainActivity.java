@@ -1,11 +1,14 @@
 package com.uryonet.remotepentax.presenter.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.uryonet.remotepentax.R;
 import com.uryonet.remotepentax.model.entity.PhotoDir;
@@ -94,7 +97,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             sectionAdapter = new SectionedRecyclerViewAdapter();
 
             for(PhotoDir dir : photoDirList) {
-                sectionAdapter.addSection(new PhotoSection(dir.getName(), dir.getFiles(), MainActivity.this));
+                sectionAdapter.addSection(new PhotoSection(dir.getName(), dir.getFiles(), MainActivity.this) {
+                    @Override
+                    protected void onPhotoClicked(View view, @NonNull String dirName, @NonNull String photoFile) {
+                        super.onPhotoClicked(view, dirName, photoFile);
+                        Intent intent = new Intent(view.getContext(), PreviewPhotoActivity.class);
+                        intent.putExtra("dirName", dirName);
+                        intent.putExtra("photoFile", photoFile);
+                        startActivity(intent);
+                    }
+                });
             }
             rvPhotoList.setAdapter(sectionAdapter);
         } else {

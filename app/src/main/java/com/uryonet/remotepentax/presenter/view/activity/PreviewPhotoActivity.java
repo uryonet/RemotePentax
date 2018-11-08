@@ -3,9 +3,9 @@ package com.uryonet.remotepentax.presenter.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.uryonet.remotepentax.R;
 import com.uryonet.remotepentax.model.network.RetrofitInstance;
 
@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 public class PreviewPhotoActivity extends AppCompatActivity {
 
     @BindView(R.id.iv_preview)
-    ImageView ivPreview;
+    PhotoView ivPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +24,9 @@ public class PreviewPhotoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = this.getIntent();
-        String photoUrl = intent.getStringExtra("photoUrl");
-        Glide.with(getApplicationContext()).load(RetrofitInstance.BASE_URL + "photos/" + photoUrl + "?size=view").into(ivPreview);
+        String dirName = intent.getStringExtra("dirName");
+        String photoFile = intent.getStringExtra("photoFile");
+        Glide.with(getApplicationContext()).load(RetrofitInstance.BASE_URL + "photos/" + dirName + "/" + photoFile + "?size=view").into(ivPreview);
     }
 
 }

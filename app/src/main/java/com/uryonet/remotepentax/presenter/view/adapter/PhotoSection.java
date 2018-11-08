@@ -2,6 +2,7 @@ package com.uryonet.remotepentax.presenter.view.adapter;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.View;
@@ -38,6 +39,9 @@ public class PhotoSection extends StatelessSection {
         this.context = context;
     }
 
+    protected void onPhotoClicked(View view, @NonNull String dirName, @NonNull String photoFile) {
+    }
+
     @Override
     public int getContentItemsTotal() {
         return files.size();
@@ -49,7 +53,7 @@ public class PhotoSection extends StatelessSection {
     }
 
     @Override
-    public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final ItemViewHolder itemHolder = (ItemViewHolder) holder;
 
         int ScreenWidthHalf = 0;
@@ -67,6 +71,14 @@ public class PhotoSection extends StatelessSection {
 
         Glide.with(context).load(RetrofitInstance.BASE_URL + "photos/" + name + "/" + files.get(position) + "?size=thumb").apply(new RequestOptions().override(ScreenWidthHalf, ScreenWidthHalf)).into(itemHolder.ivPhoto);
         itemHolder.tvPhoto.setText(files.get(position));
+
+        itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPhotoClicked(v, name, files.get(position));
+            }
+        });
+
     }
 
     @Override
@@ -94,12 +106,14 @@ public class PhotoSection extends StatelessSection {
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
 
+        private final View rootView;
         private final ImageView ivPhoto;
         private final TextView tvPhoto;
 
         ItemViewHolder(View view) {
             super(view);
 
+            rootView = view;
             ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
             tvPhoto = (TextView) view.findViewById(R.id.tvPhoto);
         }
