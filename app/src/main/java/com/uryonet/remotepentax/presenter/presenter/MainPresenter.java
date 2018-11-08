@@ -36,7 +36,9 @@ public class MainPresenter implements MainContract.Presenter {
         List<PhotoDir> photoDirs = event.photoList.getDirs();
         for(PhotoDir dir : photoDirs) {
             for(String file : dir.getFiles()) {
-                photoUrlList.add(RetrofitInstance.BASE_URL + "photos/" + dir.getName() + "/" + file);
+                if (file.contains("JPG")) {
+                    photoUrlList.add(dir.getName() + "/" + file);
+                }
             }
         }
         Log.d(TAG, photoUrlList.get(0));

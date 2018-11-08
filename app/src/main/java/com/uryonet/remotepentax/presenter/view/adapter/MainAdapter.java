@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.uryonet.remotepentax.R;
 import com.uryonet.remotepentax.app.MyApplication;
+import com.uryonet.remotepentax.model.network.RetrofitInstance;
 
 import java.util.List;
 
@@ -65,7 +67,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
             ScreenWidthHalf = screenWidth / 3 - 6;
         }
 
-        Glide.with(context).load(photoUrlList.get(position) + "?size=thumb").apply(new RequestOptions().override(ScreenWidthHalf, ScreenWidthHalf)).into(holder.ivPhoto);
+        Glide.with(context).load(RetrofitInstance.BASE_URL + "photos/" + photoUrlList.get(position) + "?size=thumb").apply(new RequestOptions().override(ScreenWidthHalf, ScreenWidthHalf)).into(holder.ivPhoto);
+        holder.tvPhoto.setText(photoUrlList.get(position));
     }
 
     @Override
@@ -76,10 +79,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
     public class MainHolder extends RecyclerView.ViewHolder {
 
         ImageView ivPhoto;
+        TextView tvPhoto;
 
         public MainHolder(View v) {
             super(v);
             ivPhoto = (ImageView) v.findViewById(R.id.ivPhoto);
+            tvPhoto = (TextView) v.findViewById(R.id.tvPhoto);
         }
     }
 }

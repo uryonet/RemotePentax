@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.uryonet.remotepentax.R;
+import com.uryonet.remotepentax.model.network.RetrofitInstance;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +25,7 @@ public class PreviewPhotoActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         String photoUrl = intent.getStringExtra("photoUrl");
-        Glide.with(getApplicationContext()).load(photoUrl + "?size=view").into(ivPreview);
+        Glide.with(getApplicationContext()).load(RetrofitInstance.BASE_URL + "photos/" + photoUrl + "?size=view").into(ivPreview);
     }
 
 }
