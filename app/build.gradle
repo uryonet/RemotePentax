@@ -50,4 +50,6 @@ dependencies {
     // Eventbus
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.android.support:support-v4:28.0.0'
+    // SectionedRecyclerViewAdapter
+    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
 }

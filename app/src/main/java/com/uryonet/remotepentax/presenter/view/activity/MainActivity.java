@@ -1,19 +1,17 @@
 package com.uryonet.remotepentax.presenter.view.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
 import com.uryonet.remotepentax.R;
+import com.uryonet.remotepentax.model.entity.PhotoDir;
 import com.uryonet.remotepentax.presenter.contract.MainContract;
 import com.uryonet.remotepentax.presenter.presenter.MainPresenter;
-import com.uryonet.remotepentax.presenter.view.adapter.MainAdapter;
+import com.uryonet.remotepentax.presenter.view.adapter.PhotoSection;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -21,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private static final String TAG = "MainActivity";
     RecyclerView.Adapter adapter;
+    SectionedRecyclerViewAdapter sectionAdapter;
     MainPresenter mainPresenter;
 
     @Override
@@ -60,7 +60,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private void setupViews() {
-        rvPhotoList.setLayoutManager(new GridLayoutManager(this, 3));
+        GridLayoutManager glm = new GridLayoutManager(this, 3);
+        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (sectionAdapter.getSectionItemViewType(position)) {
+                    case SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER:
+                        return 3;
+                    default:
+                        return 1;
+                }
+            }
+        });
+        rvPhotoList.setLayoutManager(glm);
     }
 
     private void getPhotoList() {
@@ -68,18 +80,23 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void displayPhotoList(List<String> photoUrlList) {
-        if(photoUrlList != null) {
-            adapter = new MainAdapter(photoUrlList, MainActivity.this) {
-                @Override
-                protected void onPhotoClicked(View view, @NonNull String currentPhotoUrl) {
-                    super.onPhotoClicked(view, currentPhotoUrl);
-                    Intent intent = new Intent(view.getContext(), PreviewPhotoActivity.class);
-                    intent.putExtra("photoUrl", currentPhotoUrl);
-                    startActivity(intent);
-                }
-            };
-            rvPhotoList.setAdapter(adapter);
+    public void displayPhotoList(List<PhotoDir> photoDirList) {
+        if(photoDirList != null) {
+//            adapter = new MainAdapter(photoUrlList, MainActivity.this) {
+//                @Override
+//                protected void onPhotoClicked(View view, @NonNull String currentPhotoUrl) {
+//                    super.onPhotoClicked(view, currentPhotoUrl);
+//                    Intent intent = new Intent(view.getContext(), PreviewPhotoActivity.class);
+//                    intent.putExtra("photoUrl", currentPhotoUrl);
+//                    startActivity(intent);
+//                }
+//            };
+            sectionAdapter = new SectionedRecyclerViewAdapter();
+
+            for(PhotoDir dir : photoDirList) {
+                sectionAdapter.addSection(new PhotoSection(dir.getName(), dir.getFiles(), MainActivity.this));
+            }
+            rvPhotoList.setAdapter(sectionAdapter);
         } else {
             Log.d(TAG, "PhotoDirs response null");
         }
