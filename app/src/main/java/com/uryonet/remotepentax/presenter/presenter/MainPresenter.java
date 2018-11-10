@@ -24,15 +24,6 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPhotoListEvent(PhotoListEvent event) {
-//        List<String> photoUrlList = new ArrayList<>();
-//        List<PhotoDir> photoDirs = event.photoList.getDirs();
-//        for(PhotoDir dir : photoDirs) {
-//            for(String file : dir.getFiles()) {
-//                if (file.contains("JPG")) {
-//                    photoUrlList.add(dir.getName() + "/" + file);
-//                }
-//            }
-//        }
         mainContractView.displayPhotoList(event.photoList.getDirs());
     }
 

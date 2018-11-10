@@ -9,11 +9,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.uryonet.remotepentax.R;
 import com.uryonet.remotepentax.model.entity.PhotoDir;
 import com.uryonet.remotepentax.presenter.contract.MainContract;
 import com.uryonet.remotepentax.presenter.presenter.MainPresenter;
+import com.uryonet.remotepentax.presenter.view.adapter.FilterableSection;
 import com.uryonet.remotepentax.presenter.view.adapter.PhotoSection;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
@@ -31,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     Context context;
 
     private static final String TAG = "MainActivity";
-    RecyclerView.Adapter adapter;
     SectionedRecyclerViewAdapter sectionAdapter;
     MainPresenter mainPresenter;
 
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setupMVP();
         setupViews();
         getPhotoList();
+        setPhotoFilter();
     }
 
     @Override
@@ -82,18 +86,30 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainPresenter.getPhotoList();
     }
 
+    private void setPhotoFilter() {
+        RadioGroup rg = (RadioGroup) findViewById(R.id.rgChangeFile);
+        rg.check(R.id.rbAll);
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton currentRb = (RadioButton) findViewById(i);
+                String filterTxt = currentRb.getText().toString();
+                if (currentRb.getText().toString().equals("RAW")) {
+                    filterTxt = "PEF";
+                }
+                for (Section section : sectionAdapter.getCopyOfSectionsMap().values()) {
+                    if (section instanceof FilterableSection) {
+                        ((FilterableSection) section).filter(filterTxt);
+                    }
+                }
+                sectionAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
     @Override
     public void displayPhotoList(List<PhotoDir> photoDirList) {
         if(photoDirList != null) {
-//            adapter = new MainAdapter(photoUrlList, MainActivity.this) {
-//                @Override
-//                protected void onPhotoClicked(View view, @NonNull String currentPhotoUrl) {
-//                    super.onPhotoClicked(view, currentPhotoUrl);
-//                    Intent intent = new Intent(view.getContext(), PreviewPhotoActivity.class);
-//                    intent.putExtra("photoUrl", currentPhotoUrl);
-//                    startActivity(intent);
-//                }
-//            };
             sectionAdapter = new SectionedRecyclerViewAdapter();
 
             for(PhotoDir dir : photoDirList) {

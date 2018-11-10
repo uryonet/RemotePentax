@@ -16,6 +16,7 @@ import com.uryonet.remotepentax.R;
 import com.uryonet.remotepentax.app.MyApplication;
 import com.uryonet.remotepentax.model.network.RetrofitInstance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
@@ -23,10 +24,10 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 
 import static android.content.Context.WINDOW_SERVICE;
 
-public class PhotoSection extends StatelessSection {
+public class PhotoSection extends StatelessSection implements FilterableSection {
 
     String name;
-    List<String> files;
+    List<String> files, filterFiles;
     Context context;
 
     public PhotoSection(String name, List<String> files, Context context) {
@@ -36,6 +37,7 @@ public class PhotoSection extends StatelessSection {
                 .build());
         this.name = name;
         this.files = files;
+        this.filterFiles = new ArrayList<>(files);
         this.context = context;
     }
 
@@ -44,7 +46,7 @@ public class PhotoSection extends StatelessSection {
 
     @Override
     public int getContentItemsTotal() {
-        return files.size();
+        return filterFiles.size();
     }
 
     @Override
@@ -69,13 +71,13 @@ public class PhotoSection extends StatelessSection {
             ScreenWidthHalf = screenWidth / 3 - 6;
         }
 
-        Glide.with(context).load(RetrofitInstance.BASE_URL + "photos/" + name + "/" + files.get(position) + "?size=thumb").apply(new RequestOptions().override(ScreenWidthHalf, ScreenWidthHalf)).into(itemHolder.ivPhoto);
-        itemHolder.tvPhoto.setText(files.get(position));
+        Glide.with(context).load(RetrofitInstance.BASE_URL + "photos/" + name + "/" + filterFiles.get(position) + "?size=thumb").apply(new RequestOptions().override(ScreenWidthHalf, ScreenWidthHalf)).into(itemHolder.ivPhoto);
+        itemHolder.tvPhoto.setText(filterFiles.get(position));
 
         itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPhotoClicked(v, name, files.get(position));
+                onPhotoClicked(v, name, filterFiles.get(position));
             }
         });
 
@@ -91,6 +93,22 @@ public class PhotoSection extends StatelessSection {
         HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
 
         headerHolder.tvTitle.setText(name);
+    }
+
+    @Override
+    public void filter(String query) {
+        if (query.equals("ALL")) {
+            filterFiles = new ArrayList<>(files);
+            this.setVisible(true);
+        } else {
+            filterFiles.clear();
+            for (String file_name : files) {
+                if (file_name.contains(query)) {
+                    filterFiles.add(file_name);
+                }
+            }
+            this.setVisible(!filterFiles.isEmpty());
+        }
     }
 
     private class HeaderViewHolder extends RecyclerView.ViewHolder {
