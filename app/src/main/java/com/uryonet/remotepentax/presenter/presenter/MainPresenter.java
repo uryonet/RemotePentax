@@ -1,12 +1,16 @@
 package com.uryonet.remotepentax.presenter.presenter;
 
 import com.uryonet.remotepentax.model.domain.CameraDomain;
+import com.uryonet.remotepentax.model.entity.PhotoDir;
 import com.uryonet.remotepentax.model.event.ErrorEvent;
 import com.uryonet.remotepentax.model.event.PhotoListEvent;
 import com.uryonet.remotepentax.presenter.contract.MainContract;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPresenter implements MainContract.Presenter {
 
@@ -24,7 +28,14 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPhotoListEvent(PhotoListEvent event) {
-        mainContractView.displayPhotoList(event.photoList.getDirs());
+        List<String> photoUrlList = new ArrayList<>();
+        List<PhotoDir> photoDirs = event.photoList.getDirs();
+        for(PhotoDir dir : photoDirs) {
+            for(String file : dir.getFiles()) {
+                photoUrlList.add(dir.getName() + "/" + file);
+            }
+        }
+        mainContractView.displayPhotoList(photoDirs, photoUrlList);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

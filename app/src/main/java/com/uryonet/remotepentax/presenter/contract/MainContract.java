@@ -8,7 +8,7 @@ public interface MainContract {
 
     interface View {
 
-        void displayPhotoList(List<PhotoDir> photoDirList);
+        void displayPhotoList(List<PhotoDir> photoDirList, List<String> photoUrlList);
         void displayError(String s);
 
     }

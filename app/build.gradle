@@ -54,4 +54,6 @@ dependencies {
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
     // PhotoView
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    // stream
+    implementation 'com.annimon:stream:1.2.1'
 }

@@ -41,7 +41,7 @@ public class PhotoSection extends StatelessSection implements FilterableSection 
         this.context = context;
     }
 
-    protected void onPhotoClicked(View view, @NonNull String dirName, @NonNull String photoFile) {
+    protected void onPhotoClicked(View view, @NonNull String photoFile) {
     }
 
     @Override
@@ -77,7 +77,7 @@ public class PhotoSection extends StatelessSection implements FilterableSection 
         itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPhotoClicked(v, name, filterFiles.get(position));
+                onPhotoClicked(v, filterFiles.get(position));
             }
         });
 
