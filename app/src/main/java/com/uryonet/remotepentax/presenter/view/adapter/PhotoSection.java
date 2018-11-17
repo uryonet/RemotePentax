@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,11 +27,13 @@ import static android.content.Context.WINDOW_SERVICE;
 
 public class PhotoSection extends StatelessSection implements FilterableSection {
 
+    private static final String TAG = "PhotoSection";
+
     String name;
-    List<String> files, filterFiles;
+    List<String> files, filterFiles, photoUrlList, filterPhotoUrlList;
     Context context;
 
-    public PhotoSection(String name, List<String> files, Context context) {
+    public PhotoSection(String name, List<String> files, List<String> photoUrlList, Context context) {
         super(SectionParameters.builder()
                 .itemResourceId(R.layout.row_photo)
                 .headerResourceId(R.layout.section_header)
@@ -38,10 +41,12 @@ public class PhotoSection extends StatelessSection implements FilterableSection 
         this.name = name;
         this.files = files;
         this.filterFiles = new ArrayList<>(files);
+        this.photoUrlList = photoUrlList;
+        this.filterPhotoUrlList = new ArrayList<>((photoUrlList));
         this.context = context;
     }
 
-    protected void onPhotoClicked(View view, @NonNull String photoFile) {
+    protected void onPhotoClicked(View view, @NonNull String photoFile, @NonNull List<String> photoUrlList) {
     }
 
     @Override
@@ -77,7 +82,7 @@ public class PhotoSection extends StatelessSection implements FilterableSection 
         itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPhotoClicked(v, filterFiles.get(position));
+                onPhotoClicked(v, filterFiles.get(position), filterPhotoUrlList);
             }
         });
 
@@ -99,12 +104,19 @@ public class PhotoSection extends StatelessSection implements FilterableSection 
     public void filter(String query) {
         if (query.equals("ALL")) {
             filterFiles = new ArrayList<>(files);
+            filterPhotoUrlList = new ArrayList<>(photoUrlList);
             this.setVisible(true);
         } else {
             filterFiles.clear();
+            filterPhotoUrlList.clear();
             for (String file_name : files) {
                 if (file_name.contains(query)) {
                     filterFiles.add(file_name);
+                }
+            }
+            for (String url : photoUrlList) {
+                if (url.contains(query)) {
+                    filterPhotoUrlList.add(url);
                 }
             }
             this.setVisible(!filterFiles.isEmpty());

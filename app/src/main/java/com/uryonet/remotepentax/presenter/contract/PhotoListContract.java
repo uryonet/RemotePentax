@@ -4,7 +4,7 @@ import com.uryonet.remotepentax.model.entity.PhotoDir;
 
 import java.util.List;
 
-public interface MainContract {
+public interface PhotoListContract {
 
     interface View {
 
